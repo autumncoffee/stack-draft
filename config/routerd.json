@@ -1,0 +1,30 @@
+{
+    "bind4": "127.0.0.1",
+    "stat_bind4": "127.0.0.1",
+    "port": 1490,
+    "threads": 10,
+    "stat_port": 1491,
+    "response_time_buckets": [
+        100000,
+        250000,
+        500000,
+        1000000,
+        2000000,
+        3000000
+    ],
+    "hosts": {
+        "front": [
+            "127.0.0.1:3000"
+        ]
+    },
+    "graphs": {
+        "main": {
+            "services": [
+                {"name": "output", "hosts_from": "front"}
+            ]
+        }
+    },
+    "routes": [
+        {"r": "^/", "g": "main"}
+    ]
+}

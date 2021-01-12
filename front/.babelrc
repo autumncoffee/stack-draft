@@ -1,0 +1,27 @@
+{
+  "plugins": [
+    [
+      "styled-components",
+      {
+        "ssr": true,
+        "displayName": true,
+        "preprocess": false
+      }
+    ],
+    [
+      "module-resolver",
+      {
+        "root": [
+          "./"
+        ],
+        "alias": {
+          "~": "./"
+        }
+      }
+    ]
+  ],
+  "presets": [
+    "next/babel"
+  ],
+  "compact": true
+}

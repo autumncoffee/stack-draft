@@ -1,0 +1,14 @@
+front/.next
+front/node_modules
+front/build
+front/server-dist
+
+tools/__pycache__
+tools/venv
+
+routerd/result
+routerd/nohup.out
+
+data
+run
+nohup.out

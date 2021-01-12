@@ -1,0 +1,3 @@
+[submodule "routerd"]
+	path = routerd
+	url = https://github.com/autumncoffee/routerd.git
