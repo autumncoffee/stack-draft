@@ -1,9 +1,21 @@
+default:
+	@echo 'Usage:'
+	@echo '    make build - builds all'
+	@echo '    make start - starts all'
+	@echo '    make test - to run tests'
+	@echo '    make stop - stops all'
+	@echo ''
+	@echo 'Further info - read Makefile yourself'
+	@echo ''
+
+
 MAKEFILE_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
 RUN_DIR := $(MAKEFILE_DIR)/run
 ROUTERD_DIR := $(MAKEFILE_DIR)/routerd
 BACK_DIR := $(MAKEFILE_DIR)/back
 TOOLS_DIR := $(MAKEFILE_DIR)/tools
+TESTS_DIR := $(MAKEFILE_DIR)/tests
 FRONT_DIR := $(MAKEFILE_DIR)/front
 DATA_DIR := $(MAKEFILE_DIR)/data
 
@@ -12,8 +24,13 @@ BACK_PID := $(RUN_DIR)/back
 FRONT_PID := $(RUN_DIR)/front
 
 
-default:
-	@echo 'Hey!'
+install_virtualenv:
+	python3 -m pip install virtualenv ||:
+
+define setup_virtualenv
+	cd $(1) && python3 -m virtualenv venv
+	cd $(1) && bash -c 'source ./venv/bin/activate && exec pip install -r ./requirements.txt'
+endef
 
 build_routerd:
 	cd $(ROUTERD_DIR) && nix-build
@@ -21,17 +38,18 @@ build_routerd:
 build_back:
 	cd $(BACK_DIR) && nix-build
 
-build_tools:
-	python3 -m pip install virtualenv ||:
-	cd $(TOOLS_DIR) && python3 -m virtualenv venv
-	cd $(TOOLS_DIR) && bash -c 'source ./venv/bin/activate && pip install -r ./requirements.txt'
+build_tools: install_virtualenv
+	$(call setup_virtualenv,$(TOOLS_DIR))
+
+build_tests: install_virtualenv
+	$(call setup_virtualenv,$(TESTS_DIR))
 
 build_front:
 	cd $(FRONT_DIR) && npm install
 	cd $(FRONT_DIR) && npm run build-runner
 	cd $(FRONT_DIR) && npm run build
 
-build: build_routerd build_back build_tools build_front
+build: build_routerd build_back build_tools build_tests build_front
 
 create_run_dir:
 	mkdir -p $(RUN_DIR)
@@ -60,6 +78,9 @@ start: start_routerd start_back start_front
 	@echo '*******************************'
 	@echo ''
 	@echo ''
+
+test:
+	cd $(TESTS_DIR) && bash -c 'source ./venv/bin/activate && exec ./main.py'
 
 stop_routerd:
 	kill `cat $(ROUTERD_PID)` ||:

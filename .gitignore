@@ -6,6 +6,9 @@ front/server-dist
 tools/__pycache__
 tools/venv
 
+tests/__pycache__
+tests/venv
+
 back/result
 back/nohup.out
 
