@@ -23,7 +23,7 @@ namespace NMyNS {
 
         template<typename... TArgs>
         void SendJson(TArgs&&... args) {
-            SendNoClose(RespondJson(std::forward<TArgs>(args)...));
+            Send(RespondJson(std::forward<TArgs>(args)...));
         }
 
     private:
