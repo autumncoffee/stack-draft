@@ -2,11 +2,13 @@ MAKEFILE_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
 RUN_DIR := $(MAKEFILE_DIR)/run
 ROUTERD_DIR := $(MAKEFILE_DIR)/routerd
+BACK_DIR := $(MAKEFILE_DIR)/back
 TOOLS_DIR := $(MAKEFILE_DIR)/tools
 FRONT_DIR := $(MAKEFILE_DIR)/front
 DATA_DIR := $(MAKEFILE_DIR)/data
 
 ROUTERD_PID := $(RUN_DIR)/routerd
+BACK_PID := $(RUN_DIR)/back
 FRONT_PID := $(RUN_DIR)/front
 
 
@@ -15,6 +17,9 @@ default:
 
 build_routerd:
 	cd $(ROUTERD_DIR) && nix-build
+
+build_back:
+	cd $(BACK_DIR) && nix-build
 
 build_tools:
 	python3 -m pip install virtualenv ||:
@@ -26,7 +31,7 @@ build_front:
 	cd $(FRONT_DIR) && npm run build-runner
 	cd $(FRONT_DIR) && npm run build
 
-build: build_routerd build_tools build_front
+build: build_routerd build_back build_tools build_front
 
 create_run_dir:
 	mkdir -p $(RUN_DIR)
@@ -37,13 +42,16 @@ create_data_dir:
 start_routerd: create_run_dir
 	nohup bash -c 'echo $$$$ > $(ROUTERD_PID) && exec $(ROUTERD_DIR)/result/bin/routerd $(MAKEFILE_DIR)/config/routerd.json' &
 
+start_back: create_run_dir
+	cd $(BACK_DIR) && nohup bash -c 'echo $$$$ > $(BACK_PID) && ROOT=$(MAKEFILE_DIR) BIND_V4=127.0.0.1 BIND_PORT=1495 exec ./result/bin/back' &
+
 generate_data: create_data_dir
 	cd $(TOOLS_DIR) && bash -c 'source ./venv/bin/activate && ROOT=$(MAKEFILE_DIR) exec ./generate_data.py'
 
 start_front: generate_data create_run_dir
 	cd $(FRONT_DIR) && nohup bash -c 'echo $$$$ > $(FRONT_PID) && ROOT=$(MAKEFILE_DIR) PORT=3000 NUM_WORKERS=4 exec npm run start' &
 
-start: start_routerd start_front
+start: start_routerd start_back start_front
 	@sleep 1
 	@echo ''
 	@echo ''
@@ -56,7 +64,13 @@ start: start_routerd start_front
 stop_routerd:
 	kill `cat $(ROUTERD_PID)` ||:
 
+stop_back:
+	kill `cat $(BACK_PID)` ||:
+
 stop_front:
 	kill `cat $(FRONT_PID)` ||:
 
-stop: stop_routerd stop_front
+stop: stop_routerd stop_back stop_front
+
+tail:
+	exec tail -f nohup.out back/nohup.out front/nohup.out

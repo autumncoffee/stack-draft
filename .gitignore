@@ -6,8 +6,8 @@ front/server-dist
 tools/__pycache__
 tools/venv
 
-routerd/result
-routerd/nohup.out
+back/result
+back/nohup.out
 
 data
 run

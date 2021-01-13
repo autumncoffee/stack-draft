@@ -2,12 +2,14 @@ const Express = require('express');
 const Next = require('next');
 const Cluster = require('cluster');
 const {ACExpressRouterDRequest} = require('ac-express-routerd');
+const path = require('path');
 
 const IsDev = process.env.NODE_ENV !== 'production';
 const Port = process.env.PORT || 3000;
 const NumWorkers = process.env.NUM_WORKERS || 4;
 
 const ServicesThatSetCookies = [
+  "back",
 ];
 
 function wrapHandler(handler, callNext) {
@@ -63,7 +65,10 @@ function start() {
   expressApp.disable('etag');
 
   expressApp.use('*', function(req, res, next) {
-    ACExpressRouterDRequest(req).then(next);
+    ACExpressRouterDRequest(req).then(next).catch(function() {
+      console.log('Failed to parse request for ' + req.url);
+      res.sendStatus(500);
+    });
   });
 
   expressApp.all('*', wrapHandler(function(req, res, finish) {

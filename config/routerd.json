@@ -13,18 +13,37 @@
         3000000
     ],
     "hosts": {
+        "back": [
+            "127.0.0.1:1495"
+        ],
         "front": [
             "127.0.0.1:3000"
         ]
     },
     "graphs": {
-        "main": {
+        "back_front": {
+            "services": [
+                {"name": "back"},
+                {"name": "output", "hosts_from": "front"}
+            ],
+            "deps": [
+                {"a": "output", "b": "back"}
+            ]
+        },
+        "back": {
+            "services": [
+                {"name": "output", "hosts_from": "back"}
+            ]
+        },
+        "front": {
             "services": [
                 {"name": "output", "hosts_from": "front"}
             ]
         }
     },
     "routes": [
-        {"r": "^/", "g": "main"}
+        {"r": "^/_next/", "g": "front", "n": "static"},
+        {"r": "^/api/", "g": "back", "n": "api"},
+        {"r": "^/", "g": "back_front"}
     ]
 }
