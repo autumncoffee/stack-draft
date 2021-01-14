@@ -59,7 +59,7 @@ def main():
             for _ in range(100):
                 test()
 
-            return
+            sys.exit(0)
 
         else:
             workers.append(pid)
