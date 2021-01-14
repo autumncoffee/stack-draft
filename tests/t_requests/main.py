@@ -3,6 +3,7 @@ import requests as http
 from io import BytesIO
 import re
 import os
+import sys
 
 
 def test():
