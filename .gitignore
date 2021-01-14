@@ -3,15 +3,13 @@ front/node_modules
 front/build
 front/server-dist
 
-tools/__pycache__
-tools/venv
-
-tests/__pycache__
-tests/venv
-
 back/result
-back/nohup.out
+
+tests/webdriver
 
 data
 run
 nohup.out
+__pycache__
+venv
+.DS_Store

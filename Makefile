@@ -43,6 +43,7 @@ build_tools: install_virtualenv
 
 build_tests: install_virtualenv
 	$(call setup_virtualenv,$(TESTS_DIR))
+	$(TESTS_DIR)/install.sh
 
 build_front:
 	cd $(FRONT_DIR) && npm install
