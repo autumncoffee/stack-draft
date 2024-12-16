@@ -5,7 +5,7 @@
   "scripts": {
     "build-runner": "./bin/build-runner.sh",
     "build": "NODE_ENV=production next build",
-    "start": "NODE_ENV=production node ./server-dist/run.js"
+    "start": "NODE_ENV=production exec node ./server-dist/run.js"
   },
   "dependencies": {
     "@emotion/cache": "^11.14.0",
