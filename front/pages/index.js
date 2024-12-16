@@ -50,16 +50,16 @@ export default function Home(props) {
           </div>
         ) : null}
 
-        <Grid container spacing={3}>
+        <Grid container spacing={3} columns={12}>
           {props.data.map((item) => (
-            <Grid key={item.id} item xs={12} container spacing={3}>
-              <Grid item xs={2}>
+            <Grid key={item.id} size={12} container spacing={3}>
+              <Grid size={2}>
                 {'#' + item.id}
               </Grid>
-              <Grid item xs={6}>
+              <Grid size={6}>
                 {item.msg}
               </Grid>
-              <Grid item xs={4}>
+              <Grid size={4}>
                 <Button onClick={() => onClick(item.id)}>
                   Request data from back
                 </Button>
