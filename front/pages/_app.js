@@ -1,34 +1,30 @@
-import NextApp from 'next/app';
-import React from 'react';
-import { ThemeProvider as StyledThemeProvider } from 'styled-components';
-import { ThemeProvider as MaterialThemeProvider } from '@material-ui/core/styles';
-import ScopedCssBaseline from '@material-ui/core/ScopedCssBaseline';
-import { createMuiTheme } from '@material-ui/core/styles';
+import { AppCacheProvider } from '@mui/material-nextjs/v15-pagesRouter';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { Roboto } from 'next/font/google';
+import "@/styles/globals.css";
 
-const theme = createMuiTheme({});
+const roboto = Roboto({
+  weight: ['300', '400', '500', '700'],
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-roboto',
+});
 
-export default class App extends NextApp {
-  componentDidMount() {
-    const jssStyles = document.querySelector('#jss-server-side');
+const theme = createTheme({
+  cssVariables: true,
+  typography: {
+    fontFamily: 'var(--font-roboto)',
+  },
+});
 
-    if (jssStyles && jssStyles.parentNode) {
-      jssStyles.parentNode.removeChild(jssStyles);
-    }
-  }
-
-  render() {
-    const { Component, pageProps } = this.props;
-
-    return (
-      <>
-        <ScopedCssBaseline>
-          <StyledThemeProvider theme={theme}>
-            <MaterialThemeProvider theme={theme}>
+export default function App({ Component, pageProps }) {
+  return (
+    <AppCacheProvider {...pageProps}>
+        <ThemeProvider theme={theme}>
+            <div className={roboto.variable}>
               <Component {...pageProps} />
-            </MaterialThemeProvider>
-          </StyledThemeProvider>
-        </ScopedCssBaseline>
-      </>
-    );
-  }
+            </div>
+        </ThemeProvider>
+    </AppCacheProvider>
+  );
 }

@@ -39,7 +39,7 @@ def main():
     options.add_experimental_option('useAutomationExtension', False)
 
     driver = webdriver.Chrome(executable_path=WD_BIN, options=options)
-    driver.get('http://127.0.0.1:1490/')
+    driver.get('http://127.0.0.1:1492/')
 
     rows = driver.find_elements_by_xpath('//div[@id="__next"]/div[1]/div[2]/div')
 

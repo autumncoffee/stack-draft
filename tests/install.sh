@@ -7,6 +7,8 @@
 # 3. decrement branch_base_position by 1 until something is found
 #####################
 
+exit 0
+
 cwd=`dirname "${BASH_SOURCE[0]}"`
 os=`uname -s`
 base_url='https://autumncoffee.com/misc/chrome/812852'

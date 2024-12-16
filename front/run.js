@@ -1,8 +1,9 @@
-const Express = require('express');
-const Next = require('next');
-const Cluster = require('cluster');
-const {ACExpressRouterDRequest} = require('ac-express-routerd');
-const path = require('path');
+import Express from 'express';
+import Next from 'next';
+import Cluster from 'cluster';
+import {ACExpressRouterDRequest} from 'ac-express-routerd';
+import path from 'path';
+import {parse as urlParse} from 'url';
 
 const IsDev = process.env.NODE_ENV !== 'production';
 const Port = process.env.PORT || 3000;
@@ -72,7 +73,7 @@ function start() {
   });
 
   expressApp.all('*', wrapHandler(function(req, res, finish) {
-    nextHandler(req, res)
+    nextHandler(req, res, urlParse(req.url, true))
       .then(() => finish('ok'))
       .catch(() => finish('bad'))
     ;

@@ -1,2 +1,2 @@
--e git+https://github.com/autumncoffee/py-bodyparser.git@v1.0.0#egg=ac_bodyparser
--e git+https://github.com/autumncoffee/py-diskstructs.git@v1.0.1#egg=ac_diskstructs
+-e git+https://github.com/autumncoffee/py-bodyparser.git@v1.0.1#egg=ac_bodyparser
+-e git+https://github.com/autumncoffee/py-diskstructs.git@v1.0.2#egg=ac_diskstructs

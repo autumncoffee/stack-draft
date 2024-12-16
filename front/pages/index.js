@@ -1,76 +1,57 @@
 import {HashMap} from 'ac-diskstructs';
 import path from 'path';
-import {PureComponent} from 'react';
-import {Grid, Button, CircularProgress} from '@material-ui/core';
 import {Wget} from 'ac-fetcher';
+import {useState} from 'react';
+import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
+import Grid from '@mui/material/Grid2';
 
-class IndexPage extends PureComponent {
-  constructor(props, context) {
-    super(props, context);
-
-    this.state = {
-      backResponse: '',
-      inProgress: false,
-    };
-
-    this.onClick = this.onClick.bind(this);
-  }
-
-  onClick(id) {
-    const self = this;
-
-    self.setState({
-      backResponse: '',
-      inProgress: true,
-    });
-
+export default function Home(props) {
+    const [inProgress, setInProgress] = useState(false);
+    const [backResponse, setBackResponse] = useState('');
+  const onClick = (id) => {
+    setInProgress(true);
+    setBackResponse('');
     Wget({
       method: 'get',
       url: '/api/info/' + encodeURIComponent(id),
     })
       .then(function(response) {
-        self.setState({
-          backResponse: JSON.stringify(response.data),
-          inProgress: false,
-        });
+        setBackResponse(JSON.stringify(response.data));
+        setInProgress(false);
       })
       .catch(function() {
-        self.setState({
-          inProgress: false,
-        });
-
+        setInProgress(false);
         alert('Error');
       })
     ;
-  }
-
-  render() {
+  };
     return (
       <>
         <div style={{
           margin: '10px 0px',
           padding: '5px',
         }}>
-          {this.state.inProgress ? (
+          {inProgress ? (
             <CircularProgress style={{
               margin: '10px auto',
             }} />
           ) :
-            'Backstage back response: ' + this.props.backMessage
+            'Backstage back response: ' + props.backMessage
           }
         </div>
 
-        {this.state.backResponse ? (
+        {backResponse ? (
           <div style={{
             margin: '10px 0px',
             padding: '5px',
           }}>
-            AJAX back response: {this.state.backResponse}
+            AJAX back response: {backResponse}
           </div>
         ) : null}
 
         <Grid container spacing={3}>
-          {this.props.data.map((item) => (
+          {props.data.map((item) => (
             <Grid key={item.id} item xs={12} container spacing={3}>
               <Grid item xs={2}>
                 {'#' + item.id}
@@ -79,7 +60,7 @@ class IndexPage extends PureComponent {
                 {item.msg}
               </Grid>
               <Grid item xs={4}>
-                <Button onClick={() => this.onClick(item.id)}>
+                <Button onClick={() => onClick(item.id)}>
                   Request data from back
                 </Button>
               </Grid>
@@ -88,8 +69,7 @@ class IndexPage extends PureComponent {
         </Grid>
       </>
     );
-  }
-};
+}
 
 export async function getServerSideProps({ req, params }) {
   const ROOT = process.env.ROOT;
@@ -110,5 +90,3 @@ export async function getServerSideProps({ req, params }) {
     },
   };
 }
-
-export default IndexPage;

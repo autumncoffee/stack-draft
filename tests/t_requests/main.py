@@ -15,7 +15,7 @@ def test():
     }
 
     for id_, msg in expected_rows.items():
-        response = http.get('http://127.0.0.1:1490/api/info/{}'.format(id_))
+        response = http.get('http://127.0.0.1:1492/api/info/{}'.format(id_))
         assert response.status_code == 200, 'Request must be successfull'
 
         data = response.json()
@@ -23,7 +23,7 @@ def test():
         assert data['id'] == id_, 'ID must be expected'
         assert data['msg'] == msg, 'Content must be expected'
 
-    response = http.get('http://127.0.0.1:1490/')
+    response = http.get('http://127.0.0.1:1492/')
     assert response.status_code == 200, 'Request must be successfull'
 
     tree = etree.parse(BytesIO(response.content), etree.HTMLParser())
@@ -35,7 +35,7 @@ def test():
     for row in tree.xpath('//div[@id="__next"]/div[1]/div[2]/div'):
         children = list(row)
 
-        assert len(children) == 3, 'Each data row must have 3 columns'
+        assert len(children) == 3, f'Each data row must have 3 columns, got {len(children)}'
 
         idMatch = re.search(r'^#([0-9])$', children[0].text)
 

@@ -9,8 +9,8 @@ do
     arg='--out-file'
 
     if [ -d "./${path}" ]; then
-        arg='-d'
+        arg='--out-dir'
     fi
 
-    ./node_modules/.bin/babel "./${path}" "${arg}" "${dist_dir}/${path}" || exit 1
+    ./node_modules/.bin/swc "./${path}" "${arg}" "${dist_dir}/${path}" || exit 1
 done

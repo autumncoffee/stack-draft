@@ -62,20 +62,20 @@ start_routerd: create_run_dir
 	nohup bash -c 'echo $$$$ > $(ROUTERD_PID) && exec $(ROUTERD_DIR)/result/bin/routerd $(MAKEFILE_DIR)/config/routerd.json' &
 
 start_back: create_run_dir
-	cd $(BACK_DIR) && nohup bash -c 'echo $$$$ > $(BACK_PID) && ROOT=$(MAKEFILE_DIR) BIND_V4=127.0.0.1 BIND_PORT=1495 exec ./result/bin/back' &
+	cd $(BACK_DIR) && nohup bash -c 'echo $$$$ > $(BACK_PID) && ROOT=$(MAKEFILE_DIR) BIND_V4=127.0.0.1 BIND_PORT=1497 exec ./result/bin/back' &
 
 generate_data: create_data_dir
 	cd $(TOOLS_DIR) && bash -c 'source ./venv/bin/activate && ROOT=$(MAKEFILE_DIR) exec ./generate_data.py'
 
 start_front: generate_data create_run_dir
-	cd $(FRONT_DIR) && nohup bash -c 'echo $$$$ > $(FRONT_PID) && ROOT=$(MAKEFILE_DIR) PORT=3000 NUM_WORKERS=4 exec npm run start' &
+	cd $(FRONT_DIR) && nohup bash -c 'echo $$$$ > $(FRONT_PID) && ROOT=$(MAKEFILE_DIR) PORT=3003 NUM_WORKERS=4 exec npm run start' &
 
 start: start_routerd start_back start_front
 	@sleep 1
 	@echo ''
 	@echo ''
 	@echo '*******************************'
-	@echo 'Now go to http://127.0.0.1:1490'
+	@echo 'Now go to http://127.0.0.1:1492'
 	@echo '*******************************'
 	@echo ''
 	@echo ''

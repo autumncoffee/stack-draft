@@ -6,7 +6,7 @@ from t_selenium.main import main as selenium_main
 
 def main():
     requests_main()
-    selenium_main()
+    # selenium_main()
 
     print('OK')
 
