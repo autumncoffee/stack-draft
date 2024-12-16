@@ -35,6 +35,6 @@ jobs:
 
     - run: make build
     - run: make start
-    - run: sleep 10
+    - run: sleep 60
     - run: make test
     - run: make stop
